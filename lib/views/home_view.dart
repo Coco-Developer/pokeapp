@@ -179,7 +179,7 @@ class HomeViewState extends State<HomeView> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 224, 168, 153), // Color del botón
+                        backgroundColor: const Color.fromARGB(255, 10, 218, 42), // Color del botón
                         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                       ),
                       child: const Text(
@@ -187,7 +187,7 @@ class HomeViewState extends State<HomeView> {
                         style: TextStyle(
                           fontFamily: 'Chakra Petch',
                           fontSize: 18,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 16, 10, 10),
                         ),
                       ),
                     ),

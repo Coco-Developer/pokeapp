@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import '../models/pokemon_model.dart'; // Importa el modelo de Pokémon
+import '../models/api_pokemon_model.dart';
 import '../widgets/moving_energy.dart'; // Asegúrate de que este widget existe
+import 'dart:math'; // Para generar valores aleatorios
 
-class AbilitiesView extends StatefulWidget {
-  final Pokemon pokemon;
+class PokemonApiAbilitiesView extends StatefulWidget {
+  final ApiPokemon pokemon;
 
-  const AbilitiesView({super.key, required this.pokemon});
+  const PokemonApiAbilitiesView({super.key, required this.pokemon});
 
   @override
-  AbilitiesViewState createState() => AbilitiesViewState();
+  // ignore: library_private_types_in_public_api
+  _PokemonApiAbilitiesViewState createState() => _PokemonApiAbilitiesViewState();
 }
 
-class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderStateMixin {
+class _PokemonApiAbilitiesViewState extends State<PokemonApiAbilitiesView> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late List<Animation<double>> _animations;
 
@@ -21,13 +23,14 @@ class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderS
 
     // Inicializa el controlador de animación
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 2), // Velocidad de la animación
       vsync: this,
     );
 
     // Crea animaciones para cada habilidad
     _animations = widget.pokemon.abilities.map((ability) {
-      return Tween<double>(begin: 0, end: ability.level / 100).animate(
+      double randomLevel = _getRandomAbilityLevel(); // Generar un nivel aleatorio
+      return Tween<double>(begin: 0.8, end: randomLevel).animate(
         CurvedAnimation(
           parent: _controller,
           curve: Curves.easeInOut,
@@ -45,87 +48,36 @@ class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderS
     super.dispose();
   }
 
-  void _openMaps() {
-    // Aquí podrías usar un paquete para abrir el navegador o la app de mapas
-    // Aquí se usa print como ejemplo
+  // Función para generar un valor aleatorio para la barra de habilidades
+  double _getRandomAbilityLevel() {
+    return Random().nextDouble() * 0.2 + 0.8; // Genera un valor entre 0.8 y 1.0
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Habilidades de ${widget.pokemon.name}',style: TextStyle(
-            fontFamily: 'Chakra Petch',
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
+        title: Text('${widget.pokemon.name.capitalizeFirst()} Habilidades'), // Capitaliza la primera letra
         backgroundColor: const Color(0xFFE63946),
       ),
-
       body: Stack(
         children: [
-          // Imagen de fondo del Pokémon
+          MovingEnergy(), // Fondo animado
           Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(widget.pokemon.imageUrl), // Imagen del Pokémon
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          MovingEnergy(), // Efecto de energía en movimiento
-          Container(
-            color: Colors.black.withOpacity(0.3), // Fondo negro transparente
+            color: Colors.black.withOpacity(0.3), // Fondo negro semitransparente
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Muestra la evolución del Pokémon con fondo negro
+                // Sección de evolución
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(10),
+                   
                   ),
-                  child: Text(
-                    'Evolución: ${widget.pokemon.evolution}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontFamily: 'Chakra Petch',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Botón para GPS con ícono
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: _openMaps,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black.withOpacity(0.5), 
-                        // Fondo del botón
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                      ),
-                      child: const Text(
-                        'Ubicación Habitual',
-                        style: TextStyle(
-                          fontFamily: 'Chakra Petch',
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
+              
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -144,13 +96,14 @@ class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderS
                     itemCount: widget.pokemon.abilities.length,
                     itemBuilder: (context, index) {
                       final ability = widget.pokemon.abilities[index];
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              ability.name,
+                              ability.name.capitalizeFirst(), // Usar el método de capitalización
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -159,6 +112,7 @@ class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderS
                               ),
                             ),
                             const SizedBox(height: 5),
+                            // Barra de progreso para la habilidad
                             Stack(
                               children: <Widget>[
                                 Container(
@@ -177,7 +131,10 @@ class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderS
                                       width: MediaQuery.of(context).size.width * _animations[index].value,
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
-                                          colors: [const Color.fromARGB(255, 0, 255, 51), const Color.fromARGB(255, 255, 0, 0)],
+                                          colors: [
+                                            const Color.fromARGB(255, 0, 255, 51),
+                                            const Color.fromARGB(255, 255, 0, 0),
+                                          ],
                                           begin: Alignment.centerLeft,
                                           end: Alignment.centerRight,
                                         ),
@@ -200,5 +157,12 @@ class AbilitiesViewState extends State<AbilitiesView> with SingleTickerProviderS
         ],
       ),
     );
+  }
+}
+
+// Extensión para capitalizar la primera letra del nombre
+extension StringCapitalization on String {
+  String capitalizeFirst() {
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
 }

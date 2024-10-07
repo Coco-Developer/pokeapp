@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class MovingEnergy extends StatefulWidget {
-  const MovingEnergy({Key? key}) : super(key: key);
+  const MovingEnergy({super.key});
 
   @override
   MovingEnergyState createState() => MovingEnergyState();

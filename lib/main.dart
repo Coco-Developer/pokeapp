@@ -66,7 +66,6 @@ class PokemonExample {
   void loadPokemons() {
     _pokemonService.getPokemons().then((pokemons) {
       // Procesar lista de Pokémon
-      print(pokemons.length);
     });
   }
 }

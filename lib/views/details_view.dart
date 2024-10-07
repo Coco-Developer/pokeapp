@@ -129,7 +129,7 @@ class DetailsViewState extends State<DetailsView> with SingleTickerProviderState
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     // Imagen del Pokémon
-                    Container(
+                    SizedBox(
                       width: 200,
                       height: 200,
                       child: Image.asset(
