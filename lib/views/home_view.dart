@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'grid_view.dart'; // Importa la vista de la cuadrícula de Pokémon
 import '../widgets/footer.dart'; // Importa tu footer desde la carpeta widgets
+import 'pokemon_api_grid_view.dart'; // Asegúrate de importar la nueva vista
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -78,17 +79,19 @@ class HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const SizedBox(height: 20),
+
+                    // Botón existente para el Pokédex local
                     GestureDetector(
                       onTap: () {
-                        // Aquí se añade una animación para la transición
+                        // Navegar al Pokédex local
                         Navigator.push(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (context, animation, secondaryAnimation) => PokemonGridView(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              const begin = Offset(1.0, 0.0); // Desplazamiento de la derecha
-                              const end = Offset.zero; // Posición final
-                              const curve = Curves.easeInOut; // Curva de la animación
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOut;
 
                               var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
                               var offsetAnimation = animation.drive(tween);
@@ -126,6 +129,7 @@ class HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const SizedBox(height: 20),
+
                     // Añade el texto animado aquí
                     Container(
                       decoration: BoxDecoration(
@@ -163,11 +167,36 @@ class HomeViewState extends State<HomeView> {
                         ),
                       ),
                     ),
+
+                    // Nuevo botón para el Pokédex basado en la API
+                    const SizedBox(height: 20), // Espacio antes del botón
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navegar al nuevo Pokédex paralelo basado en HTTP
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PokemonApiGridView()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 224, 168, 153), // Color del botón
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                      ),
+                      child: const Text(
+                        'Ver Pokédex (API)',
+                        style: TextStyle(
+                          fontFamily: 'Chakra Petch',
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
+
           const Footer(), // Inserta el footer aquí
         ],
       ),

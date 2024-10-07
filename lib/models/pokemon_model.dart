@@ -24,8 +24,5 @@ class Pokemon {
     required this.gpsLocation,
   });
 
-  // Método para crear un Pokémon desde Firestore
-  // static Pokemon fromFirestore(DocumentSnapshot doc) {
-  //   // Aquí puedes agregar la lógica para crear un Pokémon desde los datos de Firestore
-  // }
+
 }

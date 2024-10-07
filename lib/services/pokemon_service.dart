@@ -9,6 +9,11 @@ class PokemonService {
   PokemonService(this.dataSource);
 
   Future<List<Pokemon>> getPokemons() {
-    return dataSource.getPokemons();
+    return dataSource.getPokemons(); // Para obtener Pokémon desde la fuente de datos
+  }
+  
+  // Si necesitas un método específico para obtener desde la API:
+  Future<List<Pokemon>> getPokemonsFromApi() {
+    return dataSource.getPokemons(); // Esto puede ser el mismo método
   }
 }
